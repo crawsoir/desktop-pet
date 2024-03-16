@@ -29,13 +29,20 @@ class Pet:
 
         self.root.geometry('%dx%d+%d+%d' % (self.w, self.h, ws/2-self.w, hs-self._get_taskbar_coords()-self.h))
 
+        #bind events to functions 
         self.root.bind('<B1-Motion>', self._move)
-        self.root.bind('<Button-1>', self._get_pos)
+        self.root.bind('<Button-1>', self._set_mouse_pos)
+        self.root.bind('<Button-3>', self._do_popup)
         self.root.bind('<ButtonRelease-1>', self._snap_to_taskbar)
+
+        #right-click menu
+        self.menu = tk.Menu(self.root, tearoff=0)
+        self.menu.add_command(label="Quit", command=self.root.destroy)
+
         self.root.mainloop()
 
         
-    def _get_pos(self, event):
+    def _set_mouse_pos(self, event):
         self.xwin = event.x
         self.ywin = event.y
 
@@ -54,6 +61,10 @@ class Pet:
         monitor_area = monitor_info.get("Monitor")
         work_area = monitor_info.get("Work")
         return monitor_area[3]-work_area[3]
+    
+    def _do_popup(self, event):
+        self.menu.tk_popup(event.x_root, event.y_root)
+        self.menu.grab_release()
 
 
 
