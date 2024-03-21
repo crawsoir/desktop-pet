@@ -1,17 +1,17 @@
-from utils import context
+import tkinter as tk
+from win32api import GetMonitorInfo, MonitorFromPoint
+
 from . import test_pet_idle_state as idle
 from . import test_pet_constants as constants
-from win32api import GetMonitorInfo, MonitorFromPoint
-import tkinter as tk
-
+from utils import context
 
 
 class TestPet():
     # this colour becomes the background, and is then set to be transparent
     xwin = 0
     ywin = 0
-    w = 500
-    h = 500
+    w = constants.WIDTH
+    h = constants.HEIGHT
 
     def __init__(self):
         # tkinter create root window
@@ -20,6 +20,7 @@ class TestPet():
 
         self.root.overrideredirect(True)
         self.root.wm_attributes('-transparentcolor', constants.TRANSPARENCY)
+        self.root.configure(background=constants.TRANSPARENCY)
 
         # position the screen
         ws = self.root.winfo_screenwidth()
