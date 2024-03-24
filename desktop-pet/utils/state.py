@@ -11,7 +11,7 @@ class State(ABC):
         self._context = context
 
     @abstractmethod
-    def enter(self) -> None:
+    def enter(self, env={}) -> None:
         pass
 
     @abstractmethod

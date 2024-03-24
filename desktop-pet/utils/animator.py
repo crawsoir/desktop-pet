@@ -7,10 +7,17 @@ class Animator():
         self.animations = {}
         #TODO get trasparent colour automatically
         self.label = tk.Label(parent, bd=0, bg='#aba2a3')
-        self.curr_animation = None
+        self.label.pack()
+        self.parent = parent
 
-    def add_animation(self, anim_name, file_path, num_frames, fps=12):
-        if anim_name not in self.animations:
+        self.curr_animation = None
+        self.curr_frame = 0
+
+        self._playing = False
+        self._paused = False
+
+    def add_animation(self, anim_name, file_path, num_frames, start_frame=0, fps=12):
+        if anim_name in self.animations:
             raise Exception(f'{anim_name} is already the name of an animation')
         
         self.animations[anim_name] = []
@@ -27,9 +34,20 @@ class Animator():
         return self.curr_animation
 
     def play(self, anim_name):
+        self.curr_animation = anim_name
+        self.curr_frame = 0
+        self._play_loop()
 
+    def _play_loop(self): #TODO: add option to loop or one shot
+        self.label.configure(image = self.animations[self.curr_animation][self.curr_frame])
+        self.curr_frame = (self.curr_frame + 1) % len(self.animations[self.curr_animation])
+        self.label.after(400, self._play_loop) #TODO: use fps
+
+    def pause(self):
         pass
 
-    def pause(self, anim_name):
+    def resume(self):
         pass
 
+    def stop(self):
+        pass
