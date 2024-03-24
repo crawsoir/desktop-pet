@@ -6,11 +6,14 @@ class Context:
         self._state.context = self
         self._state.enter()
 
-    def transition_to(self, state):
+    def transition_to(self, state, env={}):
         self._state.exit()
         self._state = state
         self._state.context = self
-        self._state.enter()
+        if env == {}:
+            self._state.enter()
+        else:
+            self._state.enter(env)
 
     @property
     def root(self):

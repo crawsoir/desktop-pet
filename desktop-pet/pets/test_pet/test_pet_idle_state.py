@@ -1,30 +1,34 @@
 import random
 
-import tkinter as tk
-from win32api import GetMonitorInfo, MonitorFromPoint
-
 from . import test_pet_constants as constants
-from . import test_pet_sleep_state as sleep
+from . import test_pet_yawn_state as yawn
 from utils import state, helpers
 
 class TestPetIdleState(state.State):
     w = constants.WIDTH
     h = constants.HEIGHT
-    xwin = 0
-    ywin = 0
     blinking = False
+    hovering = False
 
-    def enter(self) -> None:
+    def enter(self, env={'xwin': 0, 'ywin':0}) -> None:
+        self.xwin = env['xwin']
+        self.ywin = env['ywin']
+        self.id=None
+
         self.context.animator.play("test_pet_idle")
 
         #bind events to functions 
-        self.context.root.bind('<B1-Motion>', self._move)
         self.context.root.bind('<Button-1>', self._set_mouse_pos)
+        self.context.root.bind('<B1-Motion>', self._move)
         self.context.root.bind('<ButtonRelease-1>', self._snap_to_taskbar)
 
         self.update() #TODO: state machine calls update after enter returns?
 
     def update(self) -> None:
+        if random.randint(0, 5) == 0 and not self.hovering:
+            self.context.transition_to(yawn.TestPetYawnState())
+            return
+
         if self.blinking:
             self.blinking = False
             self.context.animator.play("test_pet_blink")
@@ -43,6 +47,7 @@ class TestPetIdleState(state.State):
             self.context.root.after_cancel(self.id)
 
     def _set_mouse_pos(self, event):
+        self.hovering = True
         self.xwin = event.x
         self.ywin = event.y
 
@@ -50,5 +55,6 @@ class TestPetIdleState(state.State):
         self.context.root.geometry(f'+{event.x_root - self.xwin}+{event.y_root - self.ywin}')
 
     def _snap_to_taskbar(self, event):
+        self.hovering = False
         window_y = self.context.root.winfo_screenheight()-helpers.get_taskbar_height()-self.h
         self.context.root.geometry(f'+{event.x_root - self.xwin}+{window_y}')
