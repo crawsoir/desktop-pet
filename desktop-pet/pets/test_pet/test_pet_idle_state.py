@@ -7,36 +7,31 @@ from utils import state, helpers
 class TestPetIdleState(state.State):
     w = constants.WIDTH
     h = constants.HEIGHT
-    blinking = False
     hovering = False
+    blink_timer = 50
 
     def enter(self, env={'xwin': 0, 'ywin':0}) -> None:
         self.xwin = env['xwin']
         self.ywin = env['ywin']
-        self.id=None
+        self.id = None
 
-        self.context.animator.play("test_pet_idle")
+        self.context.animator.play("test_pet_idle", loop=True)
 
         #bind events to functions 
         self.context.root.bind('<Button-1>', self._set_mouse_pos)
         self.context.root.bind('<B1-Motion>', self._move)
         self.context.root.bind('<ButtonRelease-1>', self._snap_to_taskbar)
 
-        self.update() #TODO: state machine calls update after enter returns?
-
     def update(self) -> None:
-        if random.randint(0, 5) == 0 and not self.hovering:
-            self.context.transition_to(yawn.TestPetYawnState())
-            return
 
-        if self.blinking:
-            self.blinking = False
-            self.context.animator.play("test_pet_blink")
-            self.id=self.context.root.after(350, self.update) #TODO: move back to state machine?
+        if self.blink_timer == 0: # TODO: make a tkinter timer class 
+            self.blink_timer = 20
+            if self.context.animator.current_animation == "test_pet_idle":
+                self.context.animator.play("test_pet_blink", loop=True)
+            else:
+                self.context.animator.play("test_pet_idle", loop=True)
         else:
-            self.blinking = True
-            self.context.animator.play("test_pet_idle")
-            self.id=self.context.root.after(random.randint(1000,6000), self.update)
+            self.blink_timer -= 1
         
 
     def exit(self) -> None:
@@ -45,6 +40,7 @@ class TestPetIdleState(state.State):
         self.context.root.unbind('<ButtonRelease-1>')
         if self.id != None:
             self.context.root.after_cancel(self.id)
+
 
     def _set_mouse_pos(self, event):
         self.hovering = True

@@ -3,7 +3,7 @@ import tkinter as tk
 from . import test_pet_idle_state as idle
 from . import test_pet_constants as constants
 from utils import animator, context, helpers
-
+from . import test_pet_sleep_state as sleep
 class TestPet():
     w = constants.WIDTH
     h = constants.HEIGHT

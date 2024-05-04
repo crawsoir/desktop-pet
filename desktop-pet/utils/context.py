@@ -1,19 +1,25 @@
 class Context:
+
     def __init__(self, state, root, animator=None):
         self._root = root
         self._animator = animator
-        self._state = state
-        self._state.context = self
-        self._state.enter()
+        self._state = None
+        self.transition_to(state)
 
     def transition_to(self, state, env={}):
-        self._state.exit()
+        if self._state:
+            self._state.exit()
         self._state = state
         self._state.context = self
         if env == {}:
             self._state.enter()
         else:
             self._state.enter(env)
+        self._process()
+
+    def _process(self):
+        self._state.update()
+        self._root.after(100, self._process) #fps rate. make it changeable? TODO: need to cancel repeated processes
 
     @property
     def root(self):
