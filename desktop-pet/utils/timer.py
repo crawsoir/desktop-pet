@@ -8,7 +8,6 @@ class TkinterTimer():
         self.is_stopped = True
 
     def start(self, time=None):
-        print("starting timer: " + str(time))
         if time: 
             self.time = time
         if self.id: 

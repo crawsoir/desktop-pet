@@ -1,15 +1,15 @@
 import tkinter as tk
 
-from . import test_pet_idle_state as idle
+from .test_pet_states import TestPetIdleState as idle
 from . import test_pet_constants as constants
 from utils import animator, context, helpers
-from . import test_pet_sleep_state as sleep
+
 class TestPet():
 
     def __init__(self):
         self.w = constants.WIDTH
         self.h = constants.HEIGHT
-        
+
         # tkinter create root window
         self.root = tk.Tk()
         self.root.title('Test Pet')
@@ -40,7 +40,7 @@ class TestPet():
         self.anim.add_animation('sleeping', constants.ASSETS_PATH, 4)
 
         # initialize the state machine
-        self.context = context.Context(idle.TestPetIdleState(), self.root, self.anim)
+        self.context = context.Context(idle(), self.root, self.anim)
 
         self.root.mainloop()
 

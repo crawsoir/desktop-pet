@@ -49,7 +49,9 @@ class Animator():
         # end of animation
         if self._curr_frame == 0 and not self._loop:
             if self._callback:
-                self._callback() #temp fix, callback only runs for non loops. gotta add the context loop
+                # important: callback function cannot loop or hang, or else many function 
+                # calls will build and never terminate
+                self._callback() 
             self._id = None
             return
         
