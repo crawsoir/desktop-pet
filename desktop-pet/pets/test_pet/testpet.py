@@ -5,10 +5,11 @@ from . import test_pet_constants as constants
 from utils import animator, context, helpers
 from . import test_pet_sleep_state as sleep
 class TestPet():
-    w = constants.WIDTH
-    h = constants.HEIGHT
 
     def __init__(self):
+        self.w = constants.WIDTH
+        self.h = constants.HEIGHT
+        
         # tkinter create root window
         self.root = tk.Tk()
         self.root.title('Test Pet')
