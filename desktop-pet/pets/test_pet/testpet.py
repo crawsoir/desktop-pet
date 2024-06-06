@@ -16,6 +16,7 @@ class TestPet():
 
         self.root.overrideredirect(True)
         self.root.wm_attributes('-transparentcolor', constants.TRANSPARENCY)
+        self.root.wm_attributes('-topmost', True)
         self.root.configure(background=constants.TRANSPARENCY)
 
         # position the screen

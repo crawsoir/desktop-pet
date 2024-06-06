@@ -22,8 +22,7 @@ class Animator():
         
         self.animations[anim_name] = []
         for i in range(start_frame, num_frames):
-            #TODO: get size automatically
-            img = Image.open(file_path + f'\\{anim_name}{i}.png').resize((500, 500))
+            img = Image.open(file_path + f'\\{anim_name}{i}.png').resize((500, 500)) #TODO: get size automatically
             self.animations[anim_name].append(ImageTk.PhotoImage(img))
         self.anim_meta[anim_name] = {'fps': 1000//fps, 'len': num_frames}
 
