@@ -16,7 +16,7 @@ class TestPetIdleState(state.State):
         if self.x_offset != 0 or self.y_offset != 0:
             self.mouse_hovering = True
         
-        self.context.animator.play("test_pet_idle")
+        self.context.animator.play("idle")
 
         #bind events to functions 
         self.context.root.bind('<Button-1>', self._set_mouse_pos)
@@ -31,11 +31,11 @@ class TestPetIdleState(state.State):
                     self.context.transition_to(TestPetYawnState())
                     return
 
-                self.context.animator.play("test_pet_idle")
+                self.context.animator.play("idle")
                 self.blinking = False
                 self.timer.start(random.randint(3000,6000))
             else:
-                self.context.animator.play("test_pet_blink")
+                self.context.animator.play("blink")
                 self.blinking = True
                 self.timer.start(600)
 
@@ -64,7 +64,7 @@ class TestPetIdleState(state.State):
 class TestPetYawnState(state.State):
 
     def enter(self) -> None:
-        self.context.animator.play("test_pet_yawn", callback = self._switch_state)
+        self.context.animator.play("yawn", callback = self._switch_state)
         self.context.root.bind('<Button-1>', self._switch_to_idle)
 
     def update(self) -> None:
