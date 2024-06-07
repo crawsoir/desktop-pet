@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinterdnd2 import TkinterDnD, DND_FILES
 
 from .test_pet_states import TestPetIdleState as idle
 from . import test_pet_constants as constants
@@ -11,7 +12,7 @@ class TestPet():
         self.h = constants.HEIGHT
 
         # tkinter create root window
-        self.root = tk.Tk()
+        self.root = TkinterDnD.Tk()
         self.root.title('Test Pet')
 
         self.root.overrideredirect(True)
@@ -24,7 +25,9 @@ class TestPet():
         hs = self.root.winfo_screenheight()
         self.root.geometry('%dx%d+%d+%d' % (self.w, self.h, ws/2-self.w, hs-helpers.get_taskbar_height()-self.h))
 
+        # event binds
         self.root.bind('<Button-3>', self._do_popup)
+        self.root.drop_target_register(DND_FILES)
 
         #right-click menu
         self.menu = tk.Menu(self.root, tearoff=0)
