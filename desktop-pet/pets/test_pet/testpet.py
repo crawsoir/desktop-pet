@@ -2,28 +2,30 @@ import tkinter as tk
 from tkinterdnd2 import TkinterDnD, DND_FILES
 
 from .test_pet_states import TestPetIdleState as idle
-from . import test_pet_constants as constants
 from utils import animator, context, helpers
+
+
+TRANSPARENCY = '#aba2a3'
+ASSETS_PATH = 'desktop-pet\\pets\\test_pet\\sprites'
+WIDTH = 500
+HEIGHT = 500
 
 class TestPet():
 
     def __init__(self):
-        self.w = constants.WIDTH
-        self.h = constants.HEIGHT
-
         # tkinter create root window
         self.root = TkinterDnD.Tk()
         self.root.title('Test Pet')
 
         self.root.overrideredirect(True)
-        self.root.wm_attributes('-transparentcolor', constants.TRANSPARENCY)
+        self.root.wm_attributes('-transparentcolor', TRANSPARENCY)
         self.root.wm_attributes('-topmost', True)
-        self.root.configure(background=constants.TRANSPARENCY)
+        self.root.configure(background=TRANSPARENCY)
 
         # position the screen
         ws = self.root.winfo_screenwidth()
         hs = self.root.winfo_screenheight()
-        self.root.geometry('%dx%d+%d+%d' % (self.w, self.h, ws/2-self.w, hs-helpers.get_taskbar_height()-self.h))
+        self.root.geometry('%dx%d+%d+%d' % (WIDTH, HEIGHT, ws/2-WIDTH, hs-helpers.get_taskbar_height()-HEIGHT))
 
         # event binds
         self.root.bind('<Button-3>', self._do_popup)
@@ -35,13 +37,13 @@ class TestPet():
 
         # initialize animator
         self.anim = animator.Animator(self.root)
-        self.anim.add_animation('idle', constants.ASSETS_PATH, 1)
-        self.anim.add_animation('blink', constants.ASSETS_PATH, 1)
-        self.anim.add_animation('yawn', constants.ASSETS_PATH, 8)
-        self.anim.add_animation('closing', constants.ASSETS_PATH, 3)
-        self.anim.add_animation('opening', constants.ASSETS_PATH, 3)
-        self.anim.add_animation('asleep', constants.ASSETS_PATH, 2)
-        self.anim.add_animation('sleeping', constants.ASSETS_PATH, 4)
+        self.anim.add_animation('idle', ASSETS_PATH, 1)
+        self.anim.add_animation('blink', ASSETS_PATH, 1)
+        self.anim.add_animation('yawn', ASSETS_PATH, 8)
+        self.anim.add_animation('closing', ASSETS_PATH, 3, fps=6)
+        self.anim.add_animation('opening', ASSETS_PATH, 3, fps=5)
+        self.anim.add_animation('asleep', ASSETS_PATH, 2)
+        self.anim.add_animation('sleeping', ASSETS_PATH, 4)
 
         # initialize the state machine
         self.context = context.Context(idle(), self.root, self.anim)

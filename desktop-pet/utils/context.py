@@ -25,7 +25,7 @@ class Context:
 
     def _process(self):
         self._state.update()
-        self.after_id = self._root.after(100, self._process) #fps rate. make it changeable?
+        self.after_id = self._root.after(100, self._process) #update rate. make it changeable?
 
     @property
     def root(self):

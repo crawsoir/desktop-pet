@@ -1,9 +1,9 @@
 import random
 
-import send2trash 
+import send2trash
 
-from . import test_pet_constants as constants
 from utils import state, helpers, timer #TODO: put some of these utils into a single file
+
 
 class TestPetIdleState(state.State):
 
@@ -68,7 +68,10 @@ class TestPetIdleState(state.State):
         self.mouse_clicked = False
         x_pos = event.x_root - self.x_offset if event else self.context.root.winfo_x()
         #TODO: could put these calculations into a helper
-        y_pos = self.context.root.winfo_screenheight()-helpers.get_taskbar_height()-constants.HEIGHT
+
+        screen_height = self.context.root.winfo_screenheight()
+        win_height = self.context.root.winfo_height()
+        y_pos = screen_height-helpers.get_taskbar_height()-win_height
         self.context.root.geometry(f'+{x_pos}+{y_pos}')
 
 

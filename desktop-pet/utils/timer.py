@@ -1,5 +1,5 @@
 class TkinterTimer():
-    """Basically threading.timer, but seems like threading does not vibe with tkinter."""
+    """Basically threading.timer, but threading isnt supported in tkinter."""
 
     def __init__(self, root, time=0):
         self.id = None
