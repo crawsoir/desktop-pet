@@ -146,7 +146,7 @@ class TestPetEatState(state.State):
         self.y = 0
 
     def _file_dropped(self, event):
-        send2trash.send2trash(event.data.replace("/", "\\"))
+        send2trash.send2trash(event.data[1:-1].replace("/", "\\"))
         self.context.animator.play("closing", callback = self._switch_to_idle)
 
     def _file_exited(self, event):
