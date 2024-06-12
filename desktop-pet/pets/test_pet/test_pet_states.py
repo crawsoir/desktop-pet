@@ -5,6 +5,9 @@ import send2trash
 from utils import state, helpers, timer #TODO: put some of these utils into a single file
 
 
+def _switch_to_idle(context, x_offset=0, y_offset=0):
+    context.transition_to(TestPetIdleState(), {'x_offset': x_offset, 'y_offset': y_offset})
+
 class TestPetIdleState(state.State):
 
     def enter(self, env={'x_offset': 0, 'y_offset':0}) -> None:
@@ -79,16 +82,13 @@ class TestPetYawnState(state.State):
 
     def enter(self) -> None:
         self.context.animator.play("yawn", callback = self._switch_state)
-        self.context.root.bind('<Button-1>', self._switch_to_idle)
+        self.context.root.bind('<Button-1>', lambda event:_switch_to_idle(self.context, event.x, event.y))
 
     def update(self) -> None:
         pass
 
     def exit(self) -> None:
         self.context.root.unbind('<Button-1>')
-
-    def _switch_to_idle(self, event):
-        self.context.transition_to(TestPetIdleState(), {'x_offset': event.x, 'y_offset': event.y})
 
     def _switch_state(self):
         if random.randint(0, 1) == 0:
@@ -101,7 +101,7 @@ class TestPetSleepState(state.State):
 
     def enter(self) -> None:
         self.context.animator.play("sleeping", callback = self.done_sleeping)
-        self.context.root.bind('<Button-1>', self._switch_to_idle)
+        self.context.root.bind('<Button-1>', lambda event:_switch_to_idle(self.context, event.x, event.y))
 
         self.timer = timer.TkinterTimer(self.context.root)
         self.timer.start(random.randint(30000,100000))
@@ -116,9 +116,6 @@ class TestPetSleepState(state.State):
     def done_sleeping(self):
         self.context.animator.play("asleep", loop = True)
 
-    def _switch_to_idle(self, event): #TODO: could move these methods
-        self.context.transition_to(TestPetIdleState(), {'x_offset': event.x, 'y_offset': event.y})
-
 
 class TestPetEatState(state.State):
 
@@ -131,7 +128,8 @@ class TestPetEatState(state.State):
         self.context.root.bind('<Button-1>', self._mouse_clicked)
         self.context.root.bind('<ButtonRelease-1>', self._mouse_released)
         self.context.root.dnd_bind('<<Drop>>', self._file_dropped)
-        self.context.root.dnd_bind('<<DropLeave>>', self._file_exited)
+        self.context.root.dnd_bind('<<DropLeave>>', 
+                                   lambda event:_switch_to_idle(self.context, event.x_root, event.y_root))
 
     def update(self) -> None:
         pass
@@ -150,10 +148,4 @@ class TestPetEatState(state.State):
 
     def _file_dropped(self, event):
         send2trash.send2trash(event.data[1:-1].replace("/", "\\"))
-        self.context.animator.play("closing", callback = self._switch_to_idle)
-
-    def _file_exited(self, event):
-        self._switch_to_idle()
-
-    def _switch_to_idle(self):
-        self.context.transition_to(TestPetIdleState(), {'x_offset': self.x, 'y_offset': self.y})
+        self.context.animator.play("closing", callback = _switch_to_idle(self.context))
