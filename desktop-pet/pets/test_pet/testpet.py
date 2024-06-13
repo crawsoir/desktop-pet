@@ -1,4 +1,5 @@
 import tkinter as tk
+
 from tkinterdnd2 import TkinterDnD, DND_FILES
 
 from .test_pet_states import TestPetIdleState as idle
