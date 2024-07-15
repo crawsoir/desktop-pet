@@ -32,12 +32,12 @@ class TestPet():
         self.root.bind('<Button-3>', self._do_popup)
         self.root.drop_target_register(DND_FILES)
 
-        #right-click menu
+        # right-click menu
         self.menu = tk.Menu(self.root, tearoff=0)
         self.menu.add_command(label="Quit", command=self.root.destroy)
 
         # initialize animator
-        self.anim = animator.Animator(self.root)
+        self.anim = animator.Animator(self.root, default_resize = (500, 500))
         self.anim.add_animation('idle', ASSETS_PATH, 1)
         self.anim.add_animation('blink', ASSETS_PATH, 1)
         self.anim.add_animation('yawn', ASSETS_PATH, 8)

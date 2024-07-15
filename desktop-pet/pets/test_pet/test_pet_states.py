@@ -2,8 +2,10 @@ import random
 
 import send2trash
 
-from utils import state, helpers, timer #TODO: put some of these utils into a single file
-
+from utils import state, helpers, timer  
+#TODO: put some of these utils into a single file
+#TODO: give all parameters requirements
+#TODO: activate linter
 
 def _switch_to_idle(context, x_offset=0, y_offset=0):
     context.transition_to(TestPetIdleState(), {'x_offset': x_offset, 'y_offset': y_offset})
@@ -13,7 +15,7 @@ class TestPetIdleState(state.State):
     def enter(self, env={'x_offset': 0, 'y_offset':0}) -> None:
         self.mouse_clicked = False
         self.blinking = False
-        self.eating = False #TODO: add to env 
+        self.eating = False
 
         # mouse offset relative to window, assumes a transition to idle where
         # the mouse is already held down
@@ -69,8 +71,9 @@ class TestPetIdleState(state.State):
 
     def _snap_to_taskbar(self, event=None):
         self.mouse_clicked = False
+
+        # set x-coord and add offset if it's been moved 
         x_pos = event.x_root - self.x_offset if event else self.context.root.winfo_x()
-        #TODO: could put these calculations into a helper
 
         screen_height = self.context.root.winfo_screenheight()
         win_height = self.context.root.winfo_height()
