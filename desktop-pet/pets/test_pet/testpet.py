@@ -2,7 +2,7 @@ import tkinter as tk
 
 from tkinterdnd2 import TkinterDnD, DND_FILES
 
-from .test_pet_states import TestPetIdleState as idle
+from .testpet_states import TestPetIdleState as idle
 from utils.animator import Animator
 from utils.context import Context
 from utils.helpers import get_taskbar_height
