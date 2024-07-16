@@ -1,3 +1,7 @@
+from __future__ import annotations
+from abc import ABC, abstractmethod
+
+
 class Context:
     def __init__(self, state, root, animator=None):
         self._root = root
@@ -36,3 +40,25 @@ class Context:
         if self._animator == None:
             raise Exception("Animator is not set")
         return self._animator
+    
+
+class State(ABC):
+    @property
+    def context(self):
+        return self._context
+
+    @context.setter
+    def context(self, context) -> None:
+        self._context = context
+
+    @abstractmethod
+    def enter(self, env={}) -> None:
+        pass
+
+    @abstractmethod
+    def update(self) -> None:
+        pass
+
+    @abstractmethod
+    def exit(self) -> None:
+        pass

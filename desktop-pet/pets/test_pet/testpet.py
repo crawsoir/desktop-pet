@@ -3,7 +3,9 @@ import tkinter as tk
 from tkinterdnd2 import TkinterDnD, DND_FILES
 
 from .test_pet_states import TestPetIdleState as idle
-from utils import animator, context, helpers
+from utils.animator import Animator
+from utils.context import Context
+from utils.helpers import get_taskbar_height
 
 
 TRANSPARENCY = '#aba2a3'
@@ -26,7 +28,7 @@ class TestPet():
         # position the screen
         ws = self.root.winfo_screenwidth()
         hs = self.root.winfo_screenheight()
-        self.root.geometry('%dx%d+%d+%d' % (WIDTH, HEIGHT, ws/2-WIDTH, hs-helpers.get_taskbar_height()-HEIGHT))
+        self.root.geometry('%dx%d+%d+%d' % (WIDTH, HEIGHT, ws/2-WIDTH, hs-get_taskbar_height()-HEIGHT))
 
         # event binds
         self.root.bind('<Button-3>', self._do_popup)
@@ -37,7 +39,7 @@ class TestPet():
         self.menu.add_command(label="Quit", command=self.root.destroy)
 
         # initialize animator
-        self.anim = animator.Animator(self.root, default_resize = (500, 500))
+        self.anim = Animator(self.root, default_resize = (500, 500))
         self.anim.add_animation('idle', ASSETS_PATH, 1)
         self.anim.add_animation('blink', ASSETS_PATH, 1)
         self.anim.add_animation('yawn', ASSETS_PATH, 8)
@@ -47,7 +49,7 @@ class TestPet():
         self.anim.add_animation('sleeping', ASSETS_PATH, 4)
 
         # initialize the state machine
-        self.context = context.Context(idle(), self.root, self.anim)
+        self.context = Context(idle(), self.root, self.anim)
 
         self.root.mainloop()
 

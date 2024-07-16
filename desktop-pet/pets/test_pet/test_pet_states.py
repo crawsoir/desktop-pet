@@ -2,15 +2,13 @@ import random
 
 import send2trash
 
-from utils import state, helpers, timer  
-#TODO: put some of these utils into a single file
-#TODO: give all parameters requirements
-#TODO: activate linter
+from utils.context import State
+from utils.helpers import TkinterTimer as timer, get_taskbar_height
 
 def _switch_to_idle(context, x_offset=0, y_offset=0):
     context.transition_to(TestPetIdleState(), {'x_offset': x_offset, 'y_offset': y_offset})
 
-class TestPetIdleState(state.State):
+class TestPetIdleState(State):
 
     def enter(self, env={'x_offset': 0, 'y_offset':0}) -> None:
         self.mouse_clicked = False
@@ -31,7 +29,7 @@ class TestPetIdleState(state.State):
         self.context.root.dnd_bind('<<DropEnter>>', self._file_entered)
                   
         self.context.animator.play("idle")
-        self.timer = timer.TkinterTimer(self.context.root)
+        self.timer = timer(self.context.root)
 
     def update(self) -> None:
         if self.eating:
@@ -77,11 +75,11 @@ class TestPetIdleState(state.State):
 
         screen_height = self.context.root.winfo_screenheight()
         win_height = self.context.root.winfo_height()
-        y_pos = screen_height-helpers.get_taskbar_height()-win_height
+        y_pos = screen_height-get_taskbar_height()-win_height
         self.context.root.geometry(f'+{x_pos}+{y_pos}')
 
 
-class TestPetYawnState(state.State):
+class TestPetYawnState(State):
 
     def enter(self) -> None:
         self.context.animator.play("yawn", callback = self._switch_state)
@@ -100,13 +98,13 @@ class TestPetYawnState(state.State):
             self.context.transition_to(TestPetIdleState())
 
 
-class TestPetSleepState(state.State):
+class TestPetSleepState(State):
 
     def enter(self) -> None:
         self.context.animator.play("sleeping", callback = self.done_sleeping)
         self.context.root.bind('<Button-1>', lambda event:_switch_to_idle(self.context, event.x, event.y))
 
-        self.timer = timer.TkinterTimer(self.context.root)
+        self.timer = timer(self.context.root)
         self.timer.start(random.randint(30000,100000))
 
     def update(self) -> None:
@@ -120,7 +118,7 @@ class TestPetSleepState(state.State):
         self.context.animator.play("asleep", loop = True)
 
 
-class TestPetEatState(state.State):
+class TestPetEatState(State):
 
     def enter(self) -> None:
         self.mouse_clicked = False
