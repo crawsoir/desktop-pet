@@ -9,7 +9,7 @@ from utils.helpers import get_taskbar_height
 
 
 TRANSPARENCY = '#aba2a3'
-ASSETS_PATH = 'desktop-pet\\pets\\test_pet\\sprites'
+ASSETS_PATH = 'pets\\test_pet\\sprites'
 WIDTH = 500
 HEIGHT = 500
 
